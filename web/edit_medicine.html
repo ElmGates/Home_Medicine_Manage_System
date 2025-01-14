@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑药品 - 药品管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">药品管理系统</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">药品管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search_medicine.html">搜索药品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="expiring.html">过期提醒</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add_medicine.html">添加药品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="edit_medicine.html">编辑药品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="delete_medicine.html">删除药品</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">药品列表</h5>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>名称</th>
+                                        <th>批号</th>
+                                        <th>唯一编码</th>
+                                        <th>数量</th>
+                                        <th>过期日期</th>
+                                        <th>位置</th>
+                                        <th>备注</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="medicineList">
+                                    <!-- 药品列表将通过 JavaScript 动态加载 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑模态框 -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">编辑药品</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editMedicineForm">
+                        <input type="hidden" name="id" id="editMedicineId">
+                        <div class="mb-3">
+                            <label class="form-label">药品名称</label>
+                            <input type="text" class="form-control" name="name" id="editMedicineName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">批号</label>
+                            <input type="text" class="form-control" name="batch_number" id="editMedicineBatchNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">唯一编码</label>
+                            <input type="text" class="form-control" name="unique_code" id="editMedicineUniqueCode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">数量</label>
+                            <input type="number" class="form-control" name="quantity" id="editMedicineQuantity" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">过期日期</label>
+                            <input type="date" class="form-control" name="expiry_date" id="editMedicineExpiryDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">存放位置</label>
+                            <input type="text" class="form-control" name="location" id="editMedicineLocation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">备注</label>
+                            <textarea class="form-control" name="notes" id="editMedicineNotes" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">更新</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/edit_medicine.js"></script>
+</body>
+</html>

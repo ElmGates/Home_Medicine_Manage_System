@@ -1,0 +1,11 @@
+{
+    "database": {
+        "host": "mysql",
+        "dbname": "your-dbname",
+        "username": "your-username",
+        "password": "your-password"
+    },
+    "webhook": {
+        "dingtalk": "https://oapi.dingtalk.com/robot/send?access_token=yourtoken"
+    }
+} 

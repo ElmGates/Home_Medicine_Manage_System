@@ -1,0 +1,105 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .table-responsive {
+        font-size: 14px;
+    }
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
+
+/* 标签相关样式 */
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background-color: #e9ecef;
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tag.active {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.tag:hover {
+    background-color: #dee2e6;
+}
+
+.tag.active:hover {
+    background-color: #0b5ed7;
+}
+
+.selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.selected-tag {
+    background-color: #e9ecef;
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.selected-tag .remove-tag {
+    cursor: pointer;
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.tag-input-container {
+    position: relative;
+}
+
+/* 常用标签建议 */
+.tag-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.tag-suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.tag-suggestion-item:hover {
+    background-color: #f8f9fa;
+} 
