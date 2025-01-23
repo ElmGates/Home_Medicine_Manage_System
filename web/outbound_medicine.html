@@ -63,7 +63,6 @@
                                         <th>过期日期</th>
                                         <th>位置</th>
                                         <th>备注</th>
-                                        <th>出库数量</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
@@ -73,6 +72,28 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 出库模态框 -->
+    <div class="modal fade" id="outboundModal" tabindex="-1" aria-labelledby="outboundModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="outboundModalLabel">出库数量</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="outboundQuantity" class="form-label">请输入出库数量：</label>
+                        <input type="number" class="form-control" id="outboundQuantity" min="1" value="1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="confirmOutbound">确认出库</button>
                 </div>
             </div>
         </div>
