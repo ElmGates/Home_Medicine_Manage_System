@@ -1,9 +1,9 @@
 {
     "database": {
-        "host": "mysql",
-        "dbname": "your-dbname",
-        "username": "your-username",
-        "password": "you-password"
+        "host": "your-host",
+        "dbname": "medicine_system",
+        "username": "medicine_system",
+        "password": "your-password"
     },
     "webhook": {
         "dingtalk": "https://oapi.dingtalk.com/robot/send?access_token=your_token"
