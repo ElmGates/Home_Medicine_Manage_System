@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
+// 页面加载完成后执行
+document.addEventListener('DOMContentLoaded', function() {
+    loadMedicineList();
+});
+
 function loadMedicineList() {
     fetch('/api/medicine.php')
         .then(response => response.json())
@@ -35,12 +40,8 @@ function loadMedicineList() {
                     <td>${medicine.location}</td>
                     <td>${medicine.notes || '-'}</td>
                     <td>
-                        <input type="number" class="form-control outbound-quantity"
-                               min="1" max="${medicine.quantity}" value="1">
-                    </td>
-                    <td>
                         <button class="btn btn-primary btn-sm" 
-                                onclick="outboundMedicine(${medicine.id}, this)">
+                                onclick="showOutboundModal(${medicine.id}, ${medicine.quantity})">
                             出库
                         </button>
                     </td>
@@ -52,6 +53,55 @@ function loadMedicineList() {
             console.error('Error:', error);
             alert('加载药品列表失败');
         });
+}
+
+function showOutboundModal(medicineId, maxQuantity) {
+    const modal = document.getElementById('outboundModal');
+    const quantityInput = document.getElementById('outboundQuantity');
+    const confirmButton = document.getElementById('confirmOutbound');
+
+    // 设置数量输入框的最大值
+    quantityInput.max = maxQuantity;
+    quantityInput.value = 1;
+
+    // 显示模态框
+    const modalInstance = new bootstrap.Modal(modal);
+    modalInstance.show();
+
+    // 绑定确认按钮事件
+    confirmButton.onclick = function() {
+        const outboundQuantity = parseInt(quantityInput.value);
+
+        if (outboundQuantity <= 0 || outboundQuantity > maxQuantity) {
+            alert('出库数量无效');
+            return;
+        }
+
+        fetch('/api/medicine.php?action=outbound', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: medicineId,
+                quantity: outboundQuantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('出库成功');
+                modalInstance.hide();
+                loadMedicineList(); // 重新加载列表
+            } else {
+                alert(data.message || '出库失败');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('出库操作失败');
+        });
+    };
 }
 
 function outboundMedicine(medicineId, button) {
