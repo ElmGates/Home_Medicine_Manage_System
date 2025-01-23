@@ -33,40 +33,59 @@ function loadExpiringMedicines() {
         });
 }
 
-// 复用 main.js 中的删除和出库功能
 function deleteMedicine(id) {
     if (confirm('确定要删除这个药品吗？')) {
-        fetch(`/api/medicine.php?id=${id}`, {
-            method: 'DELETE'
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                loadExpiringMedicines();
-            } else {
-                alert('删除失败: ' + result.message);
-            }
-        });
+        // 先检查会话
+        fetch('/api/check_session.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                // 会话验证通过后执行删除操作
+                return fetch(`/api/medicine.php?id=${id}`, {
+                    method: 'DELETE'
+                });
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    loadExpiringMedicines();
+                } else {
+                    alert('删除失败: ' + result.message);
+                }
+            });
     }
 }
 
 function updateQuantity(id) {
     const quantity = prompt('请输入出库数量:');
     if (quantity !== null) {
-        fetch(`/api/medicine.php?id=${id}&action=outbound`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ quantity: parseInt(quantity) })
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                loadExpiringMedicines();
-            } else {
-                alert('出库失败: ' + result.message);
-            }
-        });
+        // 先检查会话
+        fetch('/api/check_session.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                // 会话验证通过后执行出库操作
+                return fetch(`/api/medicine.php?id=${id}&action=outbound`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ quantity: parseInt(quantity) })
+                });
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    loadExpiringMedicines();
+                } else {
+                    alert('出库失败: ' + result.message);
+                }
+            });
     }
-} 
+}

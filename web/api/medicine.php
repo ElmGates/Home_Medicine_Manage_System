@@ -67,6 +67,17 @@ class MedicineAPI {
             $stmt = $this->db->prepare($sql);
             $stmt->execute($params);
             
+            //if (isset($data['tags'])) {
+                // 更新标签
+                //$stmt = $this->db->prepare("DELETE FROM tags WHERE medicine_id = ?");
+                //$stmt->execute([$id]);
+                
+                //$tags = explode(',', $data['tags']);
+                //foreach ($tags as $tag) {
+                //    $stmt = $this->db->prepare("INSERT INTO tags (medicine_id, tag_name) VALUES (?, ?)");
+                //    $stmt->execute([$id, trim($tag)]);
+                //}
+            //}
             
             return ['success' => true, 'message' => '更新成功'];
         } catch(PDOException $e) {
@@ -77,9 +88,7 @@ class MedicineAPI {
     // 删除药品
     public function deleteMedicine($id) {
         try {
-            $stmt = $this->db->prepare("DELETE FROM tags WHERE medicine_id = ?");
-            $stmt->execute([$id]);
-            
+                       
             $stmt = $this->db->prepare("DELETE FROM medicines WHERE id = ?");
             $stmt->execute([$id]);
             
@@ -113,10 +122,19 @@ class MedicineAPI {
     // 添加药品
     public function addMedicine($data) {
         try {
-            $required_fields = ['name', 'batch_number', 'unique_code', 'quantity', 'expiry_date', 'location'];
+            $required_fields = ['name', 'batch_number', 'quantity', 'expiry_date', 'location'];
             foreach ($required_fields as $field) {
                 if (!isset($data[$field]) || empty($data[$field])) {
                     return ['success' => false, 'message' => "缺少必要字段: {$field}"];
+                }
+            }
+            
+            // 检查唯一码是否已存在
+            if (isset($data['unique_code']) && !empty($data['unique_code'])) {
+                $stmt = $this->db->prepare("SELECT COUNT(*) FROM medicines WHERE unique_code = ?");
+                $stmt->execute([$data['unique_code']]);
+                if ($stmt->fetchColumn() > 0) {
+                    return ['success' => false, 'message' => '该唯一码已存在'];
                 }
             }
             
@@ -200,4 +218,4 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'DELETE':
         echo json_encode($api->deleteMedicine($_GET['id']));
         break;
-} 
+}

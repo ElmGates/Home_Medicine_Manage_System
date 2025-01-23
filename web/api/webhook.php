@@ -1,5 +1,3 @@
-<!--此文件已废弃，请使用python的版本或者自行修改使用-->
-
 <?php
 class Webhook {
     private $webhook_url;

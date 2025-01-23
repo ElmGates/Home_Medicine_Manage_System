@@ -1,5 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetchMedicines();
+    // 检查用户登录状态
+    fetch('/api/check_session.php')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                // 如果未登录，重定向到登录页面
+                window.location.href = 'login.html';
+                return;
+            }
+            // 如果已登录，获取药品列表
+            fetchMedicines();
+        })
+        .catch(error => {
+            console.error('检查登录状态失败:', error);
+            window.location.href = 'login.html';
+        });
 });
 
 function fetchMedicines() {
@@ -46,4 +61,4 @@ function confirmDelete(id) {
             }
         });
     }
-} 
+}
