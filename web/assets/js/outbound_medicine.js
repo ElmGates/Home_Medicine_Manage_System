@@ -17,11 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-// 页面加载完成后执行
-document.addEventListener('DOMContentLoaded', function() {
-    loadMedicineList();
-});
-
 function loadMedicineList() {
     fetch('/api/medicine.php')
         .then(response => response.json())
