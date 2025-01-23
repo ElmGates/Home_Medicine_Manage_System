@@ -67,18 +67,6 @@ class MedicineAPI {
             $stmt = $this->db->prepare($sql);
             $stmt->execute($params);
             
-            //if (isset($data['tags'])) {
-                // 更新标签
-                //$stmt = $this->db->prepare("DELETE FROM tags WHERE medicine_id = ?");
-                //$stmt->execute([$id]);
-                
-                //$tags = explode(',', $data['tags']);
-                //foreach ($tags as $tag) {
-                //    $stmt = $this->db->prepare("INSERT INTO tags (medicine_id, tag_name) VALUES (?, ?)");
-                //    $stmt->execute([$id, trim($tag)]);
-                //}
-            //}
-            
             return ['success' => true, 'message' => '更新成功'];
         } catch(PDOException $e) {
             return ['success' => false, 'message' => $e->getMessage()];
@@ -101,11 +89,19 @@ class MedicineAPI {
     // 出库操作
     public function outbound($id, $quantity) {
         try {
-            $stmt = $this->db->prepare("SELECT quantity FROM medicines WHERE id = ?");
+            if (!is_numeric($id) || !is_numeric($quantity) || $quantity <= 0) {
+                return ['success' => false, 'message' => '无效的ID或数量'];
+            }
+
+            $stmt = $this->db->prepare("SELECT * FROM medicines WHERE id = ?");
             $stmt->execute([$id]);
             $medicine = $stmt->fetch(PDO::FETCH_ASSOC);
             
-            if ($medicine['quantity'] < $quantity) {
+            if (!$medicine) {
+                return ['success' => false, 'message' => '药品不存在'];
+            }
+            
+            if (!isset($medicine['quantity']) || $medicine['quantity'] < $quantity) {
                 return ['success' => false, 'message' => '库存不足'];
             }
             
@@ -204,7 +200,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
         if (isset($_GET['action']) && $_GET['action'] === 'outbound') {
-            echo json_encode($api->outbound($_GET['id'], $data['quantity']));
+            if (!isset($data['id']) || !isset($data['quantity'])) {
+                echo json_encode(['success' => false, 'message' => '参数错误：缺少ID或数量']);
+                break;
+            }
+            echo json_encode($api->outbound($data['id'], $data['quantity']));
         } else {
             echo json_encode($api->addMedicine($data));
         }
