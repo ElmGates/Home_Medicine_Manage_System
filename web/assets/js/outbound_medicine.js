@@ -24,6 +24,18 @@ function loadMedicineList() {
             const medicineList = document.getElementById('medicineList');
             medicineList.innerHTML = '';
 
+            if (data.length === 0) {
+                // 添加空数据提示
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `
+                    <td colspan="9" class="text-center text-muted" style="padding: 50px 0; font-size: 1.2em;">
+                        暂无数据
+                    </td>
+                `;
+                medicineList.appendChild(emptyRow);
+                return;
+            }
+
             data.forEach(medicine => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -31,6 +43,7 @@ function loadMedicineList() {
                     <td>${medicine.batch_number}</td>
                     <td>${medicine.unique_code}</td>
                     <td>${medicine.quantity}</td>
+                    <td>${medicine.unit || '件'}</td>
                     <td>${medicine.expiry_date}</td>
                     <td>${medicine.location}</td>
                     <td>${medicine.notes || '-'}</td>
@@ -114,13 +127,12 @@ function outboundMedicine(medicineId, button) {
         return;
     }
 
-    fetch('/api/medicine.php', {
+    fetch('/api/medicine.php?action=outbound', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            action: 'outbound',
             id: medicineId,
             quantity: outboundQuantity
         })

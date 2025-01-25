@@ -21,7 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(addForm);
         const data = {};
         formData.forEach((value, key) => {
-            data[key] = value;
+            // 确保所有字段都被正确添加，包括单位字段
+            if (key === 'unit' && !value) {
+                data[key] = '件'; // 如果单位为空，设置默认值
+            } else {
+                data[key] = value;
+            }
         });
 
         // 如果唯一码为空，自动生成一个

@@ -7,6 +7,7 @@ CREATE TABLE medicines (
     batch_number VARCHAR(50) NOT NULL,
     unique_code VARCHAR(50) NOT NULL,
     quantity INT NOT NULL,
+    unit VARCHAR(20) DEFAULT '件',
     expiry_date DATE NOT NULL,
     location VARCHAR(100),
     notes TEXT,

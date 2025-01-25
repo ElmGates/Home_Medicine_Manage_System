@@ -9,6 +9,18 @@ function loadExpiringMedicines() {
             const tbody = document.getElementById('expiringList');
             tbody.innerHTML = '';
             
+            if (data.length === 0) {
+                // 添加空数据提示
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `
+                    <td colspan="8" class="text-center text-muted" style="padding: 50px 0; font-size: 1.2em;">
+                        暂无数据
+                    </td>
+                `;
+                tbody.appendChild(emptyRow);
+                return;
+            }
+            
             data.forEach(medicine => {
                 const expiryDate = new Date(medicine.expiry_date);
                 const today = new Date();
@@ -20,6 +32,7 @@ function loadExpiringMedicines() {
                     <td>${medicine.name}</td>
                     <td>${medicine.batch_number}</td>
                     <td>${medicine.quantity}</td>
+                    <td>${medicine.unit || '件'}</td>
                     <td>${medicine.expiry_date}</td>
                     <td>${medicine.location}</td>
                     <td>${daysLeft}天</td>
@@ -71,12 +84,15 @@ function updateQuantity(id) {
                     return;
                 }
                 // 会话验证通过后执行出库操作
-                return fetch(`/api/medicine.php?id=${id}&action=outbound`, {
+                return fetch('/api/medicine.php?action=outbound', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ quantity: parseInt(quantity) })
+                    body: JSON.stringify({
+                        id: id,
+                        quantity: parseInt(quantity)
+                    })
                 });
             })
             .then(response => response.json())

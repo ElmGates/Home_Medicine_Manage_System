@@ -1,8 +1,19 @@
 <?php
 require_once 'db.php';
 require_once 'webhook.php';
+session_start();
 
 header('Content-Type: application/json');
+
+// 检查是否为公开请求（搜索、获取药品列表、查看详情）
+$isPublicRequest = isset($_GET['search']) || ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET['action']) || isset($_GET['id'])));
+
+// 如果不是公开请求，检查用户是否已登录
+if (!$isPublicRequest && !isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => '未登录']);
+    exit;
+}
 
 class MedicineAPI {
     private $db;
@@ -135,8 +146,8 @@ class MedicineAPI {
             }
             
             $stmt = $this->db->prepare(
-                "INSERT INTO medicines (name, batch_number, unique_code, quantity, expiry_date, location, notes) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO medicines (name, batch_number, unique_code, quantity, unit, expiry_date, location, notes) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
             );
             
             $result = $stmt->execute([
@@ -144,6 +155,7 @@ class MedicineAPI {
                 $data['batch_number'],
                 $data['unique_code'],
                 $data['quantity'],
+                $data['unit'] ?? '件',
                 $data['expiry_date'],
                 $data['location'],
                 $data['notes'] ?? ''

@@ -9,6 +9,18 @@ function fetchMedicines() {
             const medicineList = document.getElementById('medicineList');
             medicineList.innerHTML = ''; // 清空现有内容
 
+            if (data.length === 0) {
+                // 添加空数据提示
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `
+                    <td colspan="9" class="text-center text-muted" style="padding: 50px 0; font-size: 1.2em;">
+                        暂无数据
+                    </td>
+                `;
+                medicineList.appendChild(emptyRow);
+                return;
+            }
+
             data.forEach(medicine => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -16,6 +28,7 @@ function fetchMedicines() {
                     <td>${medicine.batch_number}</td>
                     <td>${medicine.unique_code}</td>
                     <td>${medicine.quantity}</td>
+                    <td>${medicine.unit || '件'}</td>
                     <td>${medicine.expiry_date}</td>
                     <td>${medicine.location}</td>
                     <td>${medicine.notes}</td>
@@ -52,6 +65,7 @@ function openEditModal(id) {
                 document.getElementById('editMedicineBatchNumber').value = medicine.batch_number || '';
                 document.getElementById('editMedicineUniqueCode').value = medicine.unique_code || '';
                 document.getElementById('editMedicineQuantity').value = medicine.quantity || '';
+                document.getElementById('editMedicineUnit').value = medicine.unit || '件';
                 document.getElementById('editMedicineExpiryDate').value = medicine.expiry_date || '';
                 document.getElementById('editMedicineLocation').value = medicine.location || '';
                 document.getElementById('editMedicineNotes').value = medicine.notes || '';
@@ -85,6 +99,7 @@ document.getElementById('editMedicineForm').addEventListener('submit', function(
                 batch_number: document.getElementById('editMedicineBatchNumber').value,
                 unique_code: document.getElementById('editMedicineUniqueCode').value,
                 quantity: document.getElementById('editMedicineQuantity').value,
+                unit: document.getElementById('editMedicineUnit').value,
                 expiry_date: document.getElementById('editMedicineExpiryDate').value,
                 location: document.getElementById('editMedicineLocation').value,
                 notes: document.getElementById('editMedicineNotes').value

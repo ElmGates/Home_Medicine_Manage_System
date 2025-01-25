@@ -53,24 +53,153 @@
             <input type="text" id="searchQuery" name="searchQuery" class="form-control" required>
             <button type="submit" class="btn btn-primary mt-2">查询</button>
         </form>
-        <table id="medicineResults" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>药品名称</th>
-                    <th>批号</th>
-                    <th>唯一编码</th>
-                    <th>数量</th>
-                    <th>过期日期</th>
-                    <th>位置</th>
-                    <th>备注</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- 查询结果将插入在这里 -->
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="medicineResults" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>药品名称</th>
+                        <th class="d-none d-md-table-cell">批号</th>
+                        <th>唯一编码</th>
+                        <th class="d-none d-md-table-cell">数量</th>
+                        <th class="d-none d-md-table-cell">单位</th>
+                        <th class="d-none d-md-table-cell">过期日期</th>
+                        <th class="d-none d-md-table-cell">存放位置</th>
+                        <th class="d-none d-md-table-cell">备注</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 查询结果将插入在这里 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 编辑药品模态框 -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">编辑药品</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editMedicineForm">
+                        <input type="hidden" id="editMedicineId">
+                        <div class="mb-3">
+                            <label for="editMedicineName" class="form-label">药品名称</label>
+                            <input type="text" class="form-control" id="editMedicineName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editMedicineBatchNumber" class="form-label">批号</label>
+                            <input type="text" class="form-control" id="editMedicineBatchNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editMedicineUniqueCode" class="form-label">唯一编码</label>
+                            <input type="text" class="form-control" id="editMedicineUniqueCode">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editMedicineQuantity" class="form-label">数量</label>
+                            <input type="number" class="form-control" id="editMedicineQuantity" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editMedicineUnit" class="form-label">单位</label>
+                            <input type="text" class="form-control" id="editMedicineUnit" value="件">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editMedicineExpiryDate" class="form-label">过期日期</label>
+                            <input type="date" class="form-control" id="editMedicineExpiryDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editMedicineLocation" class="form-label">存放位置</label>
+                            <input type="text" class="form-control" id="editMedicineLocation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editMedicineNotes" class="form-label">备注</label>
+                            <textarea class="form-control" id="editMedicineNotes"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 出库模态框 -->
+    <div class="modal fade" id="outboundModal" tabindex="-1" aria-labelledby="outboundModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="outboundModalLabel">药品出库</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="outboundForm">
+                        <input type="hidden" id="outboundMedicineId">
+                        <input type="hidden" id="outboundQuantityMax">
+                        <div class="mb-3">
+                            <label class="form-label">药品名称：<span id="outboundMedicineName"></span></label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="outboundQuantity" class="form-label">出库数量</label>
+                            <input type="number" class="form-control" id="outboundQuantity" min="1" value="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">确认出库</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 详情模态框 -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">药品详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="fw-bold">药品名称：</label>
+                        <span id="detailMedicineName"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">批号：</label>
+                        <span id="detailMedicineBatchNumber"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">唯一编码：</label>
+                        <span id="detailMedicineUniqueCode"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">数量：</label>
+                        <span id="detailMedicineQuantity"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">单位：</label>
+                        <span id="detailMedicineUnit"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">过期日期：</label>
+                        <span id="detailMedicineExpiryDate"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">存放位置：</label>
+                        <span id="detailMedicineLocation"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">备注：</label>
+                        <span id="detailMedicineNotes"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/footer.js"></script>
 </body>
 </html>
