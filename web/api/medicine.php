@@ -5,8 +5,8 @@ session_start();
 
 header('Content-Type: application/json');
 
-// 检查是否为公开请求（搜索、获取药品列表、查看详情）
-$isPublicRequest = isset($_GET['search']) || ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET['action']) || isset($_GET['id'])));
+// 检查是否为公开请求（搜索、获取药品列表、查看详情、获取即将过期药品）
+$isPublicRequest = isset($_GET['search']) || ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET['action']) || isset($_GET['id']) || (isset($_GET['action']) && $_GET['action'] === 'expiring')));
 
 // 如果不是公开请求，检查用户是否已登录
 if (!$isPublicRequest && !isset($_SESSION['user_id'])) {
